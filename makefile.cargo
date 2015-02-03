@@ -1,0 +1,159 @@
+CXX ?= g++
+AR ?= ar
+YASM ?= yasm
+
+CXXFLAGS += -iquote . -Iinclude -I$(OUT_DIR) -I$(OUT_DIR)/include
+
+MP4V2_COMMON_SRC = \
+	$(addprefix src/,\
+		3gp.cpp \
+		atom_ac3.cpp \
+		atom_amr.cpp \
+		atom_avc1.cpp \
+		atom_avcC.cpp \
+		atom_chpl.cpp \
+		atom_colr.cpp \
+		atom_d263.cpp \
+		atom_dac3.cpp \
+		atom_damr.cpp \
+		atom_dref.cpp \
+		atom_elst.cpp \
+		atom_enca.cpp \
+		atom_encv.cpp \
+		atom_free.cpp \
+		atom_ftyp.cpp \
+		atom_ftab.cpp \
+		atom_gmin.cpp \
+		atom_hdlr.cpp \
+		atom_hinf.cpp \
+		atom_hnti.cpp \
+		atom_href.cpp \
+		atom_mdat.cpp \
+		atom_mdhd.cpp \
+		atom_meta.cpp \
+		atom_mp4s.cpp \
+		atom_mp4v.cpp \
+		atom_mvhd.cpp \
+		atom_nmhd.cpp \
+		atom_ohdr.cpp \
+		atom_pasp.cpp \
+		atom_root.cpp \
+		atom_rtp.cpp \
+		atom_s263.cpp \
+		atom_sdp.cpp \
+		atom_sdtp.cpp \
+		atom_smi.cpp \
+		atom_sound.cpp \
+		atom_standard.cpp \
+		atom_stbl.cpp \
+		atom_stdp.cpp \
+		atom_stsc.cpp \
+		atom_stsd.cpp \
+		atom_stsz.cpp \
+		atom_stz2.cpp \
+		atom_text.cpp \
+		atom_tfhd.cpp \
+		atom_tkhd.cpp \
+		atom_treftype.cpp \
+		atom_trun.cpp \
+		atom_tx3g.cpp \
+		atom_udta.cpp \
+		atom_url.cpp \
+		atom_urn.cpp \
+		atom_uuid.cpp \
+		atom_video.cpp \
+		atom_vmhd.cpp \
+		cmeta.cpp \
+		descriptors.cpp \
+		exception.cpp \
+		enum.tcc \
+		isma.cpp \
+		log.cpp \
+		mp4.cpp \
+		mp4atom.cpp \
+		mp4container.cpp \
+		mp4descriptor.cpp \
+		mp4file.cpp \
+		mp4file_io.cpp \
+		mp4info.cpp \
+		mp4property.cpp \
+		mp4track.cpp \
+		mp4util.cpp \
+		ocidescriptors.cpp \
+		odcommands.cpp \
+		qosqualifiers.cpp \
+		rtphint.cpp \
+		text.cpp)
+
+MP4V2_BMFF_SRC = \
+	$(addprefix src/bmff/,\
+		typebmff.cpp)
+
+MP4V2_ITMF_SRC = \
+	$(addprefix src/itmf/,\
+		CoverArtBox.cpp \
+		Tags.cpp \
+		generic.cpp \
+		type.cpp)
+
+MP4V2_QTFF_SRC = \
+	$(addprefix src/qtff/,\
+		ColorParameterBox.cpp \
+		PictureAspectRatioBox.cpp \
+		coding.cpp)
+
+MP4V2_LIBPLATFORM_SRC = \
+	$(addprefix libplatform/,\
+		io/File.cpp \
+		io/FileSystem.cpp \
+		prog/option.cpp \
+		sys/error.cpp \
+		time/time.cpp)
+
+MP4V2_LIBPLATFORM_POSIX_SRC = \
+	$(addprefix libplatform/,\
+		io/File_posix.cpp \
+		io/FileSystem_posix.cpp \
+		number/random_posix.cpp \
+		process/process_posix.cpp \
+		time/time_posix.cpp)
+
+MP4V2_SRC = \
+	$(MP4V2_COMMON_SRC) \
+	$(MP4V2_BMFF_SRC) \
+	$(MP4V2_ITMF_SRC) \
+	$(MP4V2_QTFF_SRC) \
+	$(MP4V2_LIBPLATFORM_SRC) \
+	$(MP4V2_LIBPLATFORM_POSIX_SRC)
+
+MP4V2_OBJS = \
+	$(patsubst %.cpp,$(OUT_DIR)/%.o,$(MP4V2_SRC))
+
+GENERATED_HEADERS = \
+	$(addprefix $(OUT_DIR)/,\
+		libplatform/config.h \
+		include/mp4v2/project.h)
+
+.PHONY:	all clean
+
+all:	$(OUT_DIR)/libmp4v2.a
+
+clean:
+	rm -f $(OUT_DIR)/libmp4v2.a $(MP4V2_OBJS)
+
+$(OUT_DIR)/libplatform/config.h:
+	mkdir -p `dirname $@` || exit 1
+	echo "#ifndef LIBPLATFORM_CONFIG_H" >> $@
+	echo "#define LIBPLATFORM_CONFIG_H" >> $@
+	echo "#endif" >> $@
+
+$(OUT_DIR)/include/mp4v2/project.h:	include/mp4v2/project.h.in
+	mkdir -p `dirname $@` || exit 1
+	cp $^ $@
+
+$(OUT_DIR)/%.o:	%.cpp $(GENERATED_HEADERS)
+	mkdir -p `dirname $@` && $(CXX) -c $(CXXFLAGS) -o $@ $<
+
+$(OUT_DIR)/libmp4v2.a:	$(MP4V2_OBJS)
+	$(AR) rcs $@ $(MP4V2_OBJS)
+

@@ -1,0 +1,13 @@
+[package]
+
+name = "mp4v2-sys"
+version = "0.1.0"
+authors = ["The mp4v2 Project Developers"]
+
+build = "make -f makefile.cargo"
+
+[lib]
+
+name = "mp4v2-sys"
+path = "lib.rs"
+
