@@ -544,6 +544,8 @@ public:
     double GetTrackVideoFrameRate(MP4TrackId trackId);
 
     int GetTrackAudioChannels(MP4TrackId trackId);
+    void GetTrackRawESConfiguration(MP4TrackId trackId,
+                                    uint8_t** ppConfig, uint32_t* pConfigSize);
     void GetTrackESConfiguration(MP4TrackId trackId,
                                  uint8_t** ppConfig, uint32_t* pConfigSize);
     void SetTrackESConfiguration(MP4TrackId trackId,

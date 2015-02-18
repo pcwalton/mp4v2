@@ -3550,6 +3550,23 @@ bool MP4File::IsWriteMode()
     return true;
 }
 
+void MP4File::GetTrackRawESConfiguration(MP4TrackId trackId,
+                                         uint8_t** ppConfig, uint32_t* pConfigSize)
+{
+    MP4Atom *atom = FindAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd.*[0].esds"));
+    if (atom == NULL)
+        atom = FindAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd.*[0].*.esds"));
+    if (atom == NULL)
+        throw new Exception("couldn't find ESDS atom", __FILE__, __LINE__, __FUNCTION__);
+
+    uint64_t oldPosition = atom->GetFile().GetPosition();
+    *pConfigSize = atom->GetEnd() - atom->GetStart();
+    *ppConfig = (uint8_t *)MP4Malloc(*pConfigSize);
+    atom->GetFile().SetPosition(atom->GetStart());
+    atom->GetFile().ReadBytes(*ppConfig, *pConfigSize);
+    atom->GetFile().SetPosition(oldPosition);
+}
+
 void MP4File::GetTrackESConfiguration(MP4TrackId trackId,
                                       uint8_t** ppConfig, uint32_t* pConfigSize)
 {

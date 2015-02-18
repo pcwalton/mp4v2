@@ -2,7 +2,7 @@ CXX ?= g++
 AR ?= ar
 YASM ?= yasm
 
-CXXFLAGS += -iquote . -Iinclude -I$(OUT_DIR) -I$(OUT_DIR)/include
+CXXFLAGS += -iquote . -Iinclude -I$(OUT_DIR) -I$(OUT_DIR)/include -O2 -fPIC
 
 MP4V2_COMMON_SRC = \
 	$(addprefix src/,\

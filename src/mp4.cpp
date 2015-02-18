@@ -2468,6 +2468,28 @@ MP4FileHandle MP4ReadProvider( const char* fileName, const MP4FileProvider* file
         return 0;
     }
 
+    bool MP4GetTrackRawESConfiguration(
+        MP4FileHandle hFile, MP4TrackId trackId,
+        uint8_t** ppConfig, uint32_t* pConfigSize)
+    {
+        if (MP4_IS_VALID_FILE_HANDLE(hFile)) {
+            try {
+                ((MP4File*)hFile)->GetTrackRawESConfiguration(
+                    trackId, ppConfig, pConfigSize);
+                return true;
+            }
+            catch( Exception* x ) {
+                mp4v2::impl::log.errorf(*x);
+                delete x;
+            }
+            catch( ... ) {
+                mp4v2::impl::log.errorf( "%s: failed", __FUNCTION__ );
+            }
+        }
+        *ppConfig = NULL;
+        *pConfigSize = 0;
+        return false;
+    }
     bool MP4GetTrackESConfiguration(
         MP4FileHandle hFile, MP4TrackId trackId,
         uint8_t** ppConfig, uint32_t* pConfigSize)

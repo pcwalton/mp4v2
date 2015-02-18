@@ -200,6 +200,13 @@ bool MP4GetTrackVideoMetadata(
     uint32_t*  pConfigSize );
 
 MP4V2_EXPORT
+bool MP4GetTrackRawESConfiguration(
+    MP4FileHandle hFile,
+    MP4TrackId    trackId,
+    uint8_t**     ppConfig,
+    uint32_t*     pConfigSize );
+
+MP4V2_EXPORT
 bool MP4GetTrackESConfiguration(
     MP4FileHandle hFile,
     MP4TrackId    trackId,
