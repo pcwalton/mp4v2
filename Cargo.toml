@@ -8,6 +8,6 @@ build = "build.rs"
 
 [lib]
 
-name = "mp4v2-sys"
+name = "mp4v2_sys"
 path = "lib.rs"
 
