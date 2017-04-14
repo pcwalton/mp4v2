@@ -91,6 +91,7 @@ public:
     bool CopyClose( const string& copyFileName );
     void Dump( bool dumpImplicits = false );
     void Close(uint32_t flags = 0);
+    void SetInitialSeekOffset(int64_t seekOffset);
 
     bool Use64Bits(const char *atomName);
     void Check64BitStatus(const char *atomName);
@@ -954,6 +955,7 @@ protected:
     File*    m_file;
     uint64_t m_fileOriginalSize;
     uint32_t m_createFlags;
+    int64_t m_initialSeekOffset;
 
     MP4Atom*          m_pRootAtom;
     MP4Integer32Array m_trakIds;
