@@ -259,7 +259,8 @@ uint64_t MP4ConvertTime(uint64_t t,
 
     // check if we can safely use integer operations
     if (ilog2(t) + ilog2(newTimeScale) <= 64) {
-        return (t * newTimeScale) / oldTimeScale;
+      // convert with rounding.
+      return (t * newTimeScale + oldTimeScale / 2) / oldTimeScale;
     }
 
     // final resort is to use floating point
