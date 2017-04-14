@@ -190,6 +190,9 @@ bool MP4File::Modify( const char* fileName )
             // get rid of any trailing free or skips
             if (!strcmp(type, "free") || !strcmp(type, "skip")) {
                 m_pRootAtom->DeleteChildAtom(pAtom);
+                // Deallocate the atom after removing.
+                delete pAtom;
+                
                 continue;
             }
 
