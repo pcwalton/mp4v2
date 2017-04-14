@@ -89,6 +89,10 @@ const char* MP4GetFilename( MP4FileHandle hFile )
 
 MP4FileHandle MP4Read( const char* fileName )
 {
+      return MP4ReadFromOffset(fileName, 0);
+}
+
+MP4FileHandle MP4ReadFromOffset( const char* fileName, int64_t seekOffset) {
     if (!fileName)
         return MP4_INVALID_FILE_HANDLE;
 
@@ -99,6 +103,7 @@ MP4FileHandle MP4Read( const char* fileName )
     try
     {
         ASSERT(pFile);
+        pFile->SetInitialSeekOffset( seekOffset );
         pFile->Read( fileName, NULL );
         return (MP4FileHandle)pFile;
     }
