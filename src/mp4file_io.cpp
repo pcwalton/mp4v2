@@ -37,7 +37,7 @@ uint64_t MP4File::GetPosition( File* file )
         file = m_file;
 
     ASSERT( file );
-    return file->position;
+    return file->position - m_initialSeekOffset;
 }
 
 void MP4File::SetPosition( uint64_t pos, File* file )
@@ -53,7 +53,7 @@ void MP4File::SetPosition( uint64_t pos, File* file )
         file = m_file;
 
     ASSERT( file );
-    if( file->seek( pos ))
+    if( file->seek( pos + m_initialSeekOffset ))
         throw new PlatformException( "seek failed", sys::getLastError(), __FILE__, __LINE__, __FUNCTION__ );
 }
 
@@ -66,7 +66,7 @@ uint64_t MP4File::GetSize( File* file )
         file = m_file;
 
     ASSERT( file );
-    return file->size;
+    return file->size  - m_initialSeekOffset;
 }
 
 void MP4File::ReadBytes( uint8_t* buf, uint32_t bufsiz, File* file )
