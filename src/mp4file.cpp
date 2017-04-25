@@ -415,8 +415,7 @@ void MP4File::Open( const char* name, File::Mode mode, const MP4FileProvider* pr
 
 void MP4File::ReadFromFile()
 {
-    // ensure we start at beginning of file or at specified seek offset.
-    SetPosition(m_initialSeekOffset);
+    SetPosition(0);
 
     // create a new root atom
     ASSERT(m_pRootAtom == NULL);
