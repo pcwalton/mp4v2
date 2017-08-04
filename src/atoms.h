@@ -288,6 +288,15 @@ private:
  * Specialized Atoms
  ************************************************************************/
 
+class MP4CammAtom : public MP4Atom {
+public:
+    MP4CammAtom(MP4File &file);
+private:
+    MP4CammAtom();
+    MP4CammAtom( const MP4CammAtom &src );
+    MP4CammAtom &operator= ( const MP4CammAtom &src );
+};
+
 class MP4DrefAtom : public MP4Atom {
 public:
     MP4DrefAtom(MP4File &file);
