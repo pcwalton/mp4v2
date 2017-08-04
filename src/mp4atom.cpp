@@ -831,6 +831,8 @@ MP4Atom::factory( MP4File &file, MP4Atom* parent, const char* type )
             break;
 
         case 'c':
+            if( ATOMID(type) == ATOMID("camm") )
+                return new MP4CammAtom(file);
             if( ATOMID(type) == ATOMID("chap") )
                 return new MP4TrefTypeAtom( file, type );
             if( ATOMID(type) == ATOMID("chpl") )

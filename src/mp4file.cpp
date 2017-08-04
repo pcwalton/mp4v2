@@ -1132,7 +1132,11 @@ MP4TrackId MP4File::AddSystemsTrack(const char* type, uint32_t timeScale)
 
     (void)InsertChildAtom(MakeTrackName(trackId, "mdia.minf"), "nmhd", 0);
 
-    (void)AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd"), "mp4s");
+    bool is_camm = strcmp(type, "camm") == 0;
+    const char *sample_entry = is_camm ? "camm" : "mp4s";
+
+    (void)AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd"),
+                       sample_entry);
 
     AddDescendantAtoms(MakeTrackName(trackId, NULL), "udta.name");
 
@@ -1143,6 +1147,10 @@ MP4TrackId MP4File::AddSystemsTrack(const char* type, uint32_t timeScale)
         MakeTrackName(trackId, "mdia.minf.stbl.stsd.entryCount"),
         (MP4Property**)&pStsdCountProperty);
     pStsdCountProperty->IncrementValue();
+
+    if (is_camm) {
+      return trackId;
+    }
 
     SetTrackIntegerProperty(trackId,
                             "mdia.minf.stbl.stsd.mp4s.esds.ESID",
