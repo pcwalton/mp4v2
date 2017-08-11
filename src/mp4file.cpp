@@ -59,6 +59,7 @@ void MP4File::Init()
     m_memoryBuffer = NULL;
     m_memoryBufferSize = 0;
     m_memoryBufferPosition = 0;
+    m_initialSeekOffset = 0;
 
     m_numReadBits = 0;
     m_bufReadBits = 0;
@@ -414,7 +415,6 @@ void MP4File::Open( const char* name, File::Mode mode, const MP4FileProvider* pr
 
 void MP4File::ReadFromFile()
 {
-    // ensure we start at beginning of file
     SetPosition(0);
 
     // create a new root atom
@@ -622,6 +622,10 @@ void MP4File::Close(uint32_t options)
 
     delete m_file;
     m_file = NULL;
+}
+
+void MP4File::SetInitialSeekOffset(int64_t seekOffset) {
+    m_initialSeekOffset = seekOffset;
 }
 
 void MP4File::Rename(const char* oldFileName, const char* newFileName)
