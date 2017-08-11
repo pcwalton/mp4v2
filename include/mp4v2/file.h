@@ -444,4 +444,18 @@ MP4FileHandle MP4ReadProvider(
 
 /** @} ***********************************************************************/
 
+/** Generalized version of above MP4Read, supporting reading a MP4 file at
+ *  the specific file offset.
+ *
+ *  @param fileName As for MP4Read
+ *  @param fileOffset seek offset in file that MP4 container structure starts
+ *  at.
+ */
+
+MP4V2_EXPORT
+MP4FileHandle MP4ReadProviderFromOffset(
+    const char*            fileName,
+    const MP4FileProvider* fileProvider,
+    int64_t seekOffset );
+
 #endif /* MP4V2_FILE_H */
