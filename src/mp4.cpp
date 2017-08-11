@@ -123,6 +123,12 @@ MP4FileHandle MP4ReadFromOffset( const char* fileName, int64_t seekOffset) {
 
 MP4FileHandle MP4ReadProvider( const char* fileName, const MP4FileProvider* fileProvider )
 {
+    return MP4ReadProviderFromOffset(fileName, fileProvider, 0);
+}
+
+MP4FileHandle MP4ReadProviderFromOffset(
+    const char* fileName, const MP4FileProvider* fileProvider, int64_t seekOffset)
+{
     if (!fileName)
         return MP4_INVALID_FILE_HANDLE;
 
@@ -131,6 +137,7 @@ MP4FileHandle MP4ReadProvider( const char* fileName, const MP4FileProvider* file
         return MP4_INVALID_FILE_HANDLE;
 
     try {
+        pFile->SetInitialSeekOffset( seekOffset );
         pFile->Read( fileName, fileProvider );
         return (MP4FileHandle)pFile;
     }
@@ -147,7 +154,7 @@ MP4FileHandle MP4ReadProvider( const char* fileName, const MP4FileProvider* file
         delete pFile;
     return MP4_INVALID_FILE_HANDLE;
 }
-
+    
 ///////////////////////////////////////////////////////////////////////////////
 
     MP4FileHandle MP4Create (const char* fileName,
