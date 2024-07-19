@@ -178,6 +178,93 @@ private:
     MP4AvcCAtom &operator= ( const MP4AvcCAtom &src );
 };
 
+// Opus https://www.opus-codec.org/docs/opus_in_isobmff.html
+
+class MP4OpusAtom : public MP4Atom {
+public:
+    MP4OpusAtom(MP4File &file);
+    void Generate();
+private:
+    MP4OpusAtom();
+    MP4OpusAtom( const MP4OpusAtom &src );
+    MP4OpusAtom &operator= ( const MP4OpusAtom &src );
+};
+
+class MP4DOpsAtom : public MP4Atom {
+public:
+    MP4DOpsAtom(MP4File &file);
+    void Generate();
+private:
+    MP4DOpsAtom();
+    MP4DOpsAtom( const MP4DOpsAtom &src );
+    MP4DOpsAtom &operator= ( const MP4DOpsAtom &src );
+};
+
+// https://aomediacodec.github.io/av1-isobmff/
+
+class MP4Av01Atom : public MP4Atom {
+public:
+	MP4Av01Atom(MP4File& file);
+	void Generate();
+private:
+	MP4Av01Atom();
+	MP4Av01Atom(const MP4Av01Atom& src);
+	MP4Av01Atom& operator= (const MP4Av01Atom& src);
+};
+
+class MP4Av1CAtom : public MP4Atom {
+public:
+	MP4Av1CAtom(MP4File& file);
+	void Generate();
+private:
+	MP4Av1CAtom();
+	MP4Av1CAtom(const MP4Av1CAtom& src);
+	MP4Av1CAtom& operator= (const MP4Av1CAtom& src);
+};
+
+
+// VPXX atoms https://storage.googleapis.com/downloads.webmproject.org/docs/vp9/vp-codec-iso-media-file-format-binding-20160516-draft.pdf
+
+class MP4Vp08Atom : public MP4Atom {
+public:
+    MP4Vp08Atom(MP4File &file);
+    void Generate();
+private:
+    MP4Vp08Atom();
+    MP4Vp08Atom( const MP4Vp08Atom &src );
+    MP4Vp08Atom &operator= ( const MP4Vp08Atom &src );
+};
+
+class MP4Vp09Atom : public MP4Atom {
+public:
+    MP4Vp09Atom(MP4File &file);
+    void Generate();
+private:
+    MP4Vp09Atom();
+    MP4Vp09Atom( const MP4Vp09Atom &src );
+    MP4Vp09Atom &operator= ( const MP4Vp09Atom &src );
+};
+
+class MP4Vp10Atom : public MP4Atom {
+public:
+    MP4Vp10Atom(MP4File &file);
+    void Generate();
+private:
+    MP4Vp10Atom();
+    MP4Vp10Atom( const MP4Vp10Atom &src );
+    MP4Vp10Atom &operator= ( const MP4Vp10Atom &src );
+};
+
+class MP4VpcCAtom : public MP4FullAtom {
+public:
+    MP4VpcCAtom(MP4File &file);
+    void Generate();
+private:
+    MP4VpcCAtom();
+    MP4VpcCAtom( const MP4VpcCAtom &src );
+    MP4VpcCAtom &operator= ( const MP4VpcCAtom &src );
+};
+
 
 class MP4D263Atom : public MP4Atom {
 public:

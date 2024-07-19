@@ -124,6 +124,13 @@ MP4TrackId MP4AddAudioTrack(
     MP4Duration   sampleDuration,
     uint8_t       audioType DEFAULT(MP4_MPEG4_AUDIO_TYPE) );
 
+MP4V2_EXPORT
+MP4TrackId MP4AddOpusAudioTrack(
+    MP4FileHandle hFile,
+    uint32_t timeScale,
+    uint16_t channelCount,
+    uint32_t samplingRate);
+
 /** Add ulaw track to mp4 file.
  *
  *  MP4AddULawAudioTrack adds a ulaw track to the mp4 file. MP4WriteSample()
@@ -247,6 +254,30 @@ MP4TrackId MP4AddVideoTrack(
     uint8_t       videoType DEFAULT(MP4_MPEG4_VIDEO_TYPE) );
 
 MP4V2_EXPORT
+MP4TrackId MP4AddAV1VideoTrack(
+	MP4FileHandle hFile,
+	uint32_t      timeScale,
+	MP4Duration   sampleDuration,
+	uint16_t      width,
+	uint16_t      height);
+
+MP4V2_EXPORT
+MP4TrackId MP4AddVP8VideoTrack(
+    MP4FileHandle hFile,
+    uint32_t      timeScale,
+    MP4Duration   sampleDuration,
+    uint16_t      width,
+    uint16_t      height );
+
+MP4V2_EXPORT
+MP4TrackId MP4AddVP9VideoTrack(
+    MP4FileHandle hFile,
+    uint32_t      timeScale,
+    MP4Duration   sampleDuration,
+    uint16_t      width,
+    uint16_t      height );
+
+MP4V2_EXPORT
 MP4TrackId MP4AddH264VideoTrack(
     MP4FileHandle hFile,
     uint32_t      timeScale,
@@ -271,6 +302,14 @@ void MP4AddH264PictureParameterSet(
     MP4TrackId     trackId,
     const uint8_t* pPict,
     uint16_t       pictLen );
+
+MP4V2_EXPORT
+void MP4SetAv1SequenceObu(
+	MP4FileHandle  hFile,
+	MP4TrackId     trackId,
+	const uint8_t* pSequence,
+	uint16_t       sequenceLen);
+
 
 MP4V2_EXPORT
 void MP4SetH263Vendor(

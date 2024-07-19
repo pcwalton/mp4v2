@@ -14,8 +14,14 @@ libmp4v2_la_SOURCES = \
     src/3gp.cpp                          \
     src/atom_ac3.cpp                     \
     src/atom_amr.cpp                     \
+    src/atom_av1C.cpp                    \
     src/atom_avc1.cpp                    \
     src/atom_avcC.cpp                    \
+    src/atom_avxx.cpp                    \
+    src/atom_vpxx.cpp                    \
+    src/atom_vpcC.cpp                    \
+    src/atom_opus.cpp                    \
+    src/atom_dops.cpp                    \
     src/atom_chpl.cpp                    \
     src/atom_colr.cpp                    \
     src/atom_d263.cpp                    \

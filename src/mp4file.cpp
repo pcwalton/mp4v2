@@ -1304,6 +1304,43 @@ MP4TrackId MP4File::AddAmrAudioTrack(
     return trackId;
 }
 
+MP4TrackId MP4File::AddOpusAudioTrack(uint32_t timeScale, uint16_t channelCount,uint32_t samplingRate)
+{
+    
+    uint32_t fixedSampleDuration = (timeScale * 20)/1000; // 20mSec/Sample
+    
+    MP4TrackId trackId = AddTrack(MP4_AUDIO_TRACK_TYPE, timeScale);
+
+    AddTrackToOd(trackId);
+
+    SetTrackFloatProperty(trackId, "tkhd.volume", 1.0);
+
+    (void)InsertChildAtom(MakeTrackName(trackId, "mdia.minf"), "smhd", 0);
+
+    (void)AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd"), "Opus");
+
+    // stsd is a unique beast in that it has a count of the number
+    // of child atoms that needs to be incremented after we add the mp4a atom
+    MP4Integer32Property* pStsdCountProperty;
+    FindIntegerProperty(
+        MakeTrackName(trackId, "mdia.minf.stbl.stsd.entryCount"),
+        (MP4Property**)&pStsdCountProperty);
+    pStsdCountProperty->IncrementValue();
+    
+    SetTrackIntegerProperty(trackId,
+                            "mdia.minf.stbl.stsd.Opus.channelCount",
+                            channelCount);
+    
+    SetTrackIntegerProperty(trackId,
+                            "mdia.minf.stbl.stsd.Opus.samplingRate",
+                            samplingRate<<16);
+    
+    m_pTracks[FindTrackIndex(trackId)]->SetFixedSampleDuration(fixedSampleDuration);
+    
+    return trackId;
+}
+
+
 MP4TrackId MP4File::AddULawAudioTrack(    uint32_t timeScale)
 {
     uint32_t fixedSampleDuration = (timeScale * 20)/1000; // 20mSec/Sample
@@ -1838,6 +1875,66 @@ MP4TrackId MP4File::AddH264VideoTrack(
     return trackId;
 }
 
+MP4TrackId MP4File::AddAV1VideoTrack(
+        uint32_t timeScale,
+        MP4Duration sampleDuration,
+        uint16_t width,
+        uint16_t height)
+{
+        MP4TrackId trackId = AddVideoTrackDefault(timeScale,
+                sampleDuration,
+                width,
+                height,
+                "av01");
+
+        SetTrackIntegerProperty(trackId,
+                "mdia.minf.stbl.stsd.av01.width", width);
+        SetTrackIntegerProperty(trackId,
+                "mdia.minf.stbl.stsd.av01.height", height);
+
+        return trackId;
+}
+
+MP4TrackId MP4File::AddVP8VideoTrack(
+    uint32_t timeScale,
+    MP4Duration sampleDuration,
+    uint16_t width,
+    uint16_t height)
+{
+    MP4TrackId trackId = AddVideoTrackDefault(timeScale,
+                         sampleDuration,
+                         width,
+                         height,
+                         "vp08");
+
+    SetTrackIntegerProperty(trackId,
+                            "mdia.minf.stbl.stsd.vp08.width", width);
+    SetTrackIntegerProperty(trackId,
+                            "mdia.minf.stbl.stsd.vp08.height", height);
+    
+    return trackId;
+}
+
+MP4TrackId MP4File::AddVP9VideoTrack(
+    uint32_t timeScale,
+    MP4Duration sampleDuration,
+    uint16_t width,
+    uint16_t height)
+{
+    MP4TrackId trackId = AddVideoTrackDefault(timeScale,
+                         sampleDuration,
+                         width,
+                         height,
+                         "vp09");
+
+    SetTrackIntegerProperty(trackId,
+                            "mdia.minf.stbl.stsd.vp09.width", width);
+    SetTrackIntegerProperty(trackId,
+                            "mdia.minf.stbl.stsd.vp09.height", height);
+    
+    return trackId;
+}
+
 MP4TrackId MP4File::AddEncH264VideoTrack(
     uint32_t timeScale,
     MP4Duration sampleDuration,
@@ -2008,6 +2105,27 @@ void MP4File::AddH264PictureParameterSet (MP4TrackId trackId,
 
     return;
 }
+
+void MP4File::SetAv1SequenceObu(MP4TrackId trackId,
+        const uint8_t* pSequence,
+        uint16_t sequenceLen)
+{
+        MP4Atom* av1CAtom =
+                FindAtom(MakeTrackName(trackId,
+                        "mdia.minf.stbl.stsd.av01.av1C"));
+        MP4BytesProperty* pUnit;
+        if (av1CAtom->FindProperty("av1C.configOBUs",
+                        (MP4Property**)&pUnit) == false) {
+                log.errorf("%s: \"%s\": Could not find av1C configOBUs properties",
+                        __FUNCTION__, GetFilename().c_str());
+                return;
+        }
+
+        pUnit->SetValue(pSequence, sequenceLen);
+
+        return;
+}
+
 void  MP4File::SetH263Vendor(
     MP4TrackId trackId,
     uint32_t vendor)

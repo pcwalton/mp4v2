@@ -191,14 +191,14 @@ MP4Atom* MP4Atom::ReadAtom(MP4File& file, MP4Atom* pParentAtom)
 
     pAtom->SetParentAtom(pParentAtom);
 
-	try {
-		pAtom->Read();
-	}
-	catch (Exception* x) {
-		// delete atom and rethrow so we don't leak memory.
-		delete pAtom;	
-		throw x;
-	}
+    try {
+        pAtom->Read();
+    }
+    catch (Exception* x) {
+        // delete atom and rethrow so we don't leak memory.
+        delete pAtom;    
+        throw x;
+    }
 
 
     return pAtom;
@@ -649,9 +649,11 @@ void MP4Atom::Dump(uint8_t indent, bool dumpImplicits)
         if( can.length() )
             can.resize( can.length() - 1 );
 
-        log.dump(indent, MP4_LOG_VERBOSE1, "\"%s\": type %s (%s)",
+        log.dump(indent, MP4_LOG_VERBOSE1, "\"%s\": type %s (%s) %d childs %d properties",
                  GetFile().GetFilename().c_str(),
-                 m_type, can.c_str() );
+                 m_type, can.c_str(),
+                 m_pChildAtoms.Size(),
+                 m_pProperties.Size());
     }
 
     uint32_t i;
@@ -808,6 +810,11 @@ MP4Atom::factory( MP4File &file, MP4Atom* parent, const char* type )
 
     // no-context construction (old-style)
     switch( (uint8_t)type[0] ) {
+        case 'O':    
+            if( ATOMID(type) == ATOMID("Opus") )
+                return new MP4OpusAtom(file);
+            break;
+        
         case 'S':
             if( ATOMID(type) == ATOMID("SVQ3") )
                 return new MP4VideoAtom( file, type );
@@ -816,6 +823,10 @@ MP4Atom::factory( MP4File &file, MP4Atom* parent, const char* type )
             break;
 
         case 'a':
+            if (ATOMID(type) == ATOMID("av01"))
+                return new MP4Av01Atom(file);
+            if (ATOMID(type) == ATOMID("av1C"))
+                    return new MP4Av1CAtom(file);
             if( ATOMID(type) == ATOMID("avc1") )
                 return new MP4Avc1Atom(file);
             if( ATOMID(type) == ATOMID("ac-3") )
@@ -850,6 +861,8 @@ MP4Atom::factory( MP4File &file, MP4Atom* parent, const char* type )
                 return new MP4TrefTypeAtom( file, type );
             if( ATOMID(type) == ATOMID("dac3") )
                 return new MP4DAc3Atom(file);
+            if( ATOMID(type) == ATOMID("dOps") )
+                return new MP4DOpsAtom(file);
             break;
 
         case 'e':
@@ -997,6 +1010,15 @@ MP4Atom::factory( MP4File &file, MP4Atom* parent, const char* type )
         case 'v':
             if( ATOMID(type) == ATOMID("vmhd") )
                 return new MP4VmhdAtom(file);
+            if( ATOMID(type) == ATOMID("vp08") )
+                return new MP4Vp08Atom(file);
+            if( ATOMID(type) == ATOMID("vp09") )
+                return new MP4Vp09Atom(file);
+            if( ATOMID(type) == ATOMID("vp10") )
+                return new MP4Vp10Atom(file);
+            if( ATOMID(type) == ATOMID("vpcC") )
+                return new MP4VpcCAtom(file);
+
             break;
 
         case 'y':

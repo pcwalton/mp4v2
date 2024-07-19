@@ -817,6 +817,28 @@ MP4FileHandle MP4ReadProvider( const char* fileName, const MP4FileProvider* file
         return MP4_INVALID_TRACK_ID;
     }
 
+    MP4TrackId MP4AddOpusAudioTrack(
+        MP4FileHandle hFile,
+        uint32_t timeScale,
+        uint16_t channelCount,
+        uint32_t samplingRate)
+    {
+        if (MP4_IS_VALID_FILE_HANDLE(hFile)) {
+            try {
+                return ((MP4File*)hFile)->
+                       AddOpusAudioTrack(timeScale,channelCount,samplingRate);
+            }
+            catch( Exception* x ) {
+                mp4v2::impl::log.errorf(*x);
+                delete x;
+            }
+            catch( ... ) {
+                mp4v2::impl::log.errorf( "%s: failed", __FUNCTION__ );
+            }
+        }
+        return MP4_INVALID_TRACK_ID;
+    }
+    
     MP4TrackId MP4AddULawAudioTrack(
         MP4FileHandle hFile,
         uint32_t timeScale)
@@ -896,7 +918,7 @@ MP4FileHandle MP4ReadProvider( const char* fileName, const MP4FileProvider* file
         }
 
         catch (...) {
-            return MP4_INVALID_TRACK_ID;
+            return NULL;
         }
     }
 
@@ -1189,6 +1211,83 @@ MP4FileHandle MP4ReadProvider( const char* fileName, const MP4FileProvider* file
         return MP4_INVALID_TRACK_ID;
     }
 
+    MP4TrackId MP4AddAV1VideoTrack(MP4FileHandle hFile,
+            uint32_t timeScale,
+            MP4Duration sampleDuration,
+            uint16_t width,
+            uint16_t height)
+    {
+            if (MP4_IS_VALID_FILE_HANDLE(hFile)) {
+                    try {
+                            MP4File* pFile = (MP4File*)hFile;
+
+                            return pFile->AddAV1VideoTrack(timeScale,
+                                    sampleDuration,
+                                    width,
+                                    height);
+                    }
+                    catch (Exception* x) {
+                            mp4v2::impl::log.errorf(*x);
+                            delete x;
+                    }
+                    catch (...) {
+                            mp4v2::impl::log.errorf("%s: failed", __FUNCTION__);
+                    }
+            }
+            return MP4_INVALID_TRACK_ID;
+    }
+
+    MP4TrackId MP4AddVP8VideoTrack(MP4FileHandle hFile,
+                                    uint32_t timeScale,
+                                    MP4Duration sampleDuration,
+                                    uint16_t width,
+                                    uint16_t height)
+    {
+        if (MP4_IS_VALID_FILE_HANDLE(hFile)) {
+            try {
+                MP4File *pFile = (MP4File *)hFile;
+
+                return pFile->AddVP8VideoTrack(timeScale,
+                                                sampleDuration,
+                                                width,
+                                                height);
+            }
+            catch( Exception* x ) {
+                mp4v2::impl::log.errorf(*x);
+                delete x;
+            }
+            catch( ... ) {
+                mp4v2::impl::log.errorf( "%s: failed", __FUNCTION__ );
+            }
+        }
+        return MP4_INVALID_TRACK_ID;
+    }
+
+    MP4TrackId MP4AddVP9VideoTrack(MP4FileHandle hFile,
+                                    uint32_t timeScale,
+                                    MP4Duration sampleDuration,
+                                    uint16_t width,
+                                    uint16_t height)
+    {
+        if (MP4_IS_VALID_FILE_HANDLE(hFile)) {
+            try {
+                MP4File *pFile = (MP4File *)hFile;
+
+                return pFile->AddVP9VideoTrack(timeScale,
+                                                sampleDuration,
+                                                width,
+                                                height);
+            }
+            catch( Exception* x ) {
+                mp4v2::impl::log.errorf(*x);
+                delete x;
+            }
+            catch( ... ) {
+                mp4v2::impl::log.errorf( "%s: failed", __FUNCTION__ );
+            }
+        }
+        return MP4_INVALID_TRACK_ID;
+    }
 
     MP4TrackId MP4AddH264VideoTrack(MP4FileHandle hFile,
                                     uint32_t timeScale,
@@ -1314,6 +1413,31 @@ MP4FileHandle MP4ReadProvider( const char* fileName, const MP4FileProvider* file
             }
         }
         return;
+    }
+    void MP4SetAv1SequenceObu(
+            MP4FileHandle  hFile,
+            MP4TrackId     trackId,
+            const uint8_t* pSequence,
+            uint16_t       sequenceLen)
+    {
+            if (MP4_IS_VALID_FILE_HANDLE(hFile)) {
+                    try {
+                            MP4File* pFile = (MP4File*)hFile;
+
+                            pFile->SetAv1SequenceObu(trackId,
+                                    pSequence,
+                                    sequenceLen);
+                            return;
+                    }
+                    catch (Exception* x) {
+                            mp4v2::impl::log.errorf(*x);
+                            delete x;
+                    }
+                    catch (...) {
+                            mp4v2::impl::log.errorf("%s: failed", __FUNCTION__);
+                    }
+            }
+            return;
     }
 
     MP4TrackId MP4AddH263VideoTrack(

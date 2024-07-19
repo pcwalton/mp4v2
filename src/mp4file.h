@@ -247,11 +247,16 @@ public:
         uint32_t timeScale,
         MP4Duration sampleDuration,
         uint8_t audioType);
-
+    
+    MP4TrackId AddOpusAudioTrack(
+	uint32_t timeScale,
+	uint16_t channelCount,
+	uint32_t samplingRate);
+    
     MP4TrackId AddULawAudioTrack(
         uint32_t timeScale);
 
-    MP4TrackId AddALawAudioTrack(
+   MP4TrackId AddALawAudioTrack(
         uint32_t timeScale);
 
     MP4TrackId AddAC3AudioTrack(
@@ -338,6 +343,24 @@ public:
         uint32_t avgBitrate,
         uint32_t maxBitrate);
 
+    MP4TrackId AddAV1VideoTrack(
+            uint32_t timeScale,
+            MP4Duration sampleDuration,
+            uint16_t width,
+            uint16_t height);
+
+    MP4TrackId AddVP8VideoTrack(
+	uint32_t timeScale,
+	MP4Duration sampleDuration,
+	uint16_t width,
+	uint16_t height);
+
+    MP4TrackId AddVP9VideoTrack(
+	uint32_t timeScale,
+	MP4Duration sampleDuration,
+	uint16_t width,
+	uint16_t height);
+
     MP4TrackId AddH264VideoTrack(
         uint32_t timeScale,
         MP4Duration sampleDuration,
@@ -362,6 +385,9 @@ public:
     void AddH264PictureParameterSet(MP4TrackId trackId,
                                     const uint8_t *pPicture,
                                     uint16_t pictureLen);
+    void SetAv1SequenceObu(MP4TrackId trackId,
+            const uint8_t* pSequence,
+            uint16_t sequenceLen);
     MP4TrackId AddHintTrack(MP4TrackId refTrackId);
 
     MP4TrackId AddTextTrack(MP4TrackId refTrackId);

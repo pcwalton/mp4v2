@@ -128,6 +128,7 @@ typedef uint32_t (*encryptFunc_t)( uint32_t, uint32_t, uint8_t*, uint32_t*, uint
 #define MP4_ULAW_AUDIO_TYPE             0xE4 /* a private definition */
 #define MP4_G723_AUDIO_TYPE             0xE5 /* a private definition */
 #define MP4_PCM16_BIG_ENDIAN_AUDIO_TYPE 0xE6 /* a private definition */
+#define MP4_OPUS_AUDIO_TYPE             0xE7 /* a private definition */
 
 /* MP4 MPEG-4 Audio types from 14496-3 Table 1.5.1 */
 #define MP4_MPEG4_INVALID_AUDIO_TYPE        0
@@ -184,6 +185,9 @@ typedef uint32_t (*encryptFunc_t)( uint32_t, uint32_t, uint8_t*, uint32_t*, uint
 #define MP4_YUV12_VIDEO_TYPE            0xF0    /* a private definition */
 #define MP4_H263_VIDEO_TYPE             0xF2    /* a private definition */
 #define MP4_H261_VIDEO_TYPE             0xF3    /* a private definition */
+#define MP4_VP8_VIDEO_TYPE              0xF4    /* a private definition */
+#define MP4_VP9_VIDEO_TYPE              0xF5    /* a private definition */
+#define MP4_AV1_VIDEO_TYPE              0xF6    /* a private definition */
 
 /* MP4 Video type utilities */
 #define MP4_IS_MPEG1_VIDEO_TYPE(type) \

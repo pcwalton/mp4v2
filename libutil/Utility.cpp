@@ -531,26 +531,26 @@ Utility::process_impl()
                 printHelp( false, false );
                 return SUCCESS;
 
-            case LC_DEBUG:
+            case static_cast<int>(LC_DEBUG):
                 debugUpdate( std::strtoul( prog::optarg, NULL, 0 ) );
                 break;
 
-            case LC_VERBOSE:
+            case static_cast<int>(LC_VERBOSE):
             {
                 const uint32_t level = std::strtoul( prog::optarg, NULL, 0 );
                 _verbosity = ( level < 4 ) ? level : 3;
                 break;
             }
 
-            case LC_HELP:
+            case static_cast<int>(LC_HELP):
                 printHelp( true, false );
                 return SUCCESS;
 
-            case LC_VERSION:
+            case static_cast<int>(LC_VERSION):
                 printVersion( false );
                 return SUCCESS;
 
-            case LC_VERSIONX:
+            case static_cast<int>(LC_VERSIONX):
                 printVersion( true );
                 return SUCCESS;
 
